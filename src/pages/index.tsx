@@ -1,10 +1,25 @@
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/button';
+import { AuthContext } from '@/contexts/AuthContext';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
+import { FormEvent, useContext } from 'react';
 
 export default function Home() {
+  const { signIn } = useContext(AuthContext);
+
+  async function handleLogin(e: FormEvent) {
+    e.preventDefault();
+
+    const data = {
+      email: 'test@gmail.com',
+      password: '123456',
+    };
+
+    await signIn(data);
+  }
+
   return (
     <>
       <Head>
@@ -20,7 +35,7 @@ export default function Home() {
         />
 
         <div className="mt-8 flex w-[100%] flex-col items-center justify-center px-6 py-8 md:w-[600px]">
-          <form className="flex w-[90%] flex-col">
+          <form className="flex w-[90%] flex-col" onSubmit={handleLogin}>
             <Input type="text" placeholder="Digite seu email" />
             <Input type="password" placeholder="Digite sua senha" />
 
