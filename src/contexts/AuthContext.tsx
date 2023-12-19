@@ -27,8 +27,8 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<UserProps>();
   const isAuthenticated = !!user;
 
-  async function signIn() {
-    console.log('SignIn');
+  async function signIn({ email, password }: SignInProps) {
+    console.log({ email, password });
   }
 
   return (
