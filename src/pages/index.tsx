@@ -5,6 +5,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FormEvent, useContext, useState } from 'react';
+import { toast } from 'react-toastify';
 
 export default function Home() {
   const [email, setEmail] = useState('');
@@ -16,7 +17,10 @@ export default function Home() {
   async function handleLogin(e: FormEvent) {
     e.preventDefault();
 
-    if (email === '' || password === '') return;
+    if (email === '' || password === '') {
+      toast.warning('Preencha todos os campos!');
+      return;
+    }
 
     setLoading(true);
 

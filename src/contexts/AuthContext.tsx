@@ -2,6 +2,7 @@ import { api } from '@/utils/apiClient';
 import router from 'next/router';
 import { destroyCookie, setCookie } from 'nookies';
 import { createContext, useState } from 'react';
+import { toast } from 'react-toastify';
 
 interface AuthContextData {
   user: UserProps | undefined;
@@ -69,8 +70,11 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
       api.defaults.headers['Authorization'] = `Bearer ${token}`;
 
+      toast.success('Logado com successo!');
+
       router.push('/dashboard');
     } catch (error) {
+      toast.error('Erro ao acessar!');
       console.log('Error', error);
     }
   }
@@ -83,8 +87,11 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         password,
       });
 
+      toast.success('Conta criada!');
+
       router.push('/');
     } catch (error) {
+      toast.error('Error ao cadastrar!');
       console.log('Error', error);
     }
   }
