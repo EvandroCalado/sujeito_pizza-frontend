@@ -30,7 +30,10 @@ export default function Signup() {
             </Button>
           </form>
 
-          <Link href={'/'} className="mt-4 cursor-pointer text-white">
+          <Link
+            href={'/'}
+            className="mt-4 cursor-pointer text-white duration-150 hover:brightness-75"
+          >
             Já possue conta? Faça login!
           </Link>
         </div>

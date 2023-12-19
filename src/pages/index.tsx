@@ -44,7 +44,10 @@ export default function Home() {
             </Button>
           </form>
 
-          <Link href={'/signup'} className="mt-4 cursor-pointer text-white">
+          <Link
+            href={'/signup'}
+            className="mt-4 cursor-pointer text-white duration-150 hover:brightness-75"
+          >
             Não possue uma conta? Cadastre-se!
           </Link>
         </div>
