@@ -9,7 +9,7 @@ import { FormEvent, useContext, useState } from 'react';
 export default function Home() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
 
   const { signIn } = useContext(AuthContext);
 
