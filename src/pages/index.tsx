@@ -1,4 +1,5 @@
 import Input from '@/components/ui/Input';
+import Button from '@/components/ui/button';
 import Head from 'next/head';
 import Image from 'next/image';
 
@@ -15,6 +16,10 @@ export default function Home() {
           <form>
             <Input type="text" placeholder="Digite seu email" />
             <Input type="password" placeholder="Digite sua senha" />
+
+            <Button type="submit" loading={false}>
+              Acessar
+            </Button>
           </form>
         </div>
       </div>
