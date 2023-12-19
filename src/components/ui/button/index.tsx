@@ -9,7 +9,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 export default function Button({ loading, children, ...rest }: ButtonProps) {
   return (
     <button
-      className="max-w-xl rounded-md bg-red-900 p-2 text-white duration-150 hover:brightness-110 disabled:cursor-not-allowed"
+      className="rounded-md bg-red-900 p-2 text-white duration-150 hover:brightness-110 disabled:cursor-not-allowed"
       disabled={loading}
       {...rest}
     >
