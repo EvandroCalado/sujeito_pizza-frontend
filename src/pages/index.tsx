@@ -9,14 +9,20 @@ import { FormEvent, useContext, useState } from 'react';
 export default function Home() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  // const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const { signIn } = useContext(AuthContext);
 
   async function handleLogin(e: FormEvent) {
     e.preventDefault();
 
+    if (email === '' || password === '') return;
+
+    setLoading(true);
+
     await signIn({ email, password });
+
+    setLoading(false);
   }
 
   return (
@@ -48,7 +54,7 @@ export default function Home() {
               onChange={(e) => setPassword(e.target.value)}
             />
 
-            <Button type="submit" loading={false}>
+            <Button type="submit" loading={loading}>
               Acessar
             </Button>
           </form>

@@ -8,6 +8,7 @@ interface AuthContextData {
   isAuthenticated: boolean;
   signIn: (credentials: SignInProps) => Promise<void>;
   signOut: () => void;
+  signUp: (credentials: SignUpProps) => Promise<void>;
 }
 
 interface UserProps {
@@ -17,6 +18,12 @@ interface UserProps {
 }
 
 interface SignInProps {
+  email: string;
+  password: string;
+}
+
+interface SignUpProps {
+  name: string;
   email: string;
   password: string;
 }
@@ -68,8 +75,24 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
+  async function signUp({ name, email, password }: SignUpProps) {
+    try {
+      await api.post('/users', {
+        name,
+        email,
+        password,
+      });
+
+      router.push('/');
+    } catch (error) {
+      console.log('Error', error);
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, signIn, signOut }}>
+    <AuthContext.Provider
+      value={{ user, isAuthenticated, signIn, signOut, signUp }}
+    >
       {children}
     </AuthContext.Provider>
   );
