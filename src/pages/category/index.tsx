@@ -2,11 +2,12 @@ import Header from '@/components/Header';
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/button';
 import { setupApiClient } from '@/utils/api';
+import { canSSRAuth } from '@/utils/canSSRAuth';
 import Head from 'next/head';
 import { FormEvent, useState } from 'react';
 import { toast } from 'react-toastify';
 
-export default function Categories() {
+export default function Category() {
   const [name, setName] = useState('');
 
   async function handleRegister(e: FormEvent) {
@@ -56,3 +57,9 @@ export default function Categories() {
     </>
   );
 }
+
+export const getServerSideProps = canSSRAuth(async () => {
+  return {
+    props: {},
+  };
+});

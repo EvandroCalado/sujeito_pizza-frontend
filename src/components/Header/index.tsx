@@ -16,13 +16,13 @@ export default function Header() {
 
         <nav className="flex items-center gap-4">
           <Link
-            href={'/categories'}
+            href={'/category'}
             className="relative inline-block px-2 text-white duration-150 hover:text-red-900"
           >
             Categoria
           </Link>
           <Link
-            href={'/products'}
+            href={'/product'}
             className="relative inline-block px-2 text-white duration-150 hover:text-red-900"
           >
             Cardapio
