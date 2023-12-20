@@ -1,14 +1,20 @@
+import Header from '@/components/Header';
 import { canSSRAuth } from '@/utils/canSSRAuth';
+import Head from 'next/head';
 
-export type DashboardProps = {
-  title?: string;
-};
-
-export default function Dashboard({ title = 'Dashboard' }: DashboardProps) {
+export default function Dashboard() {
   return (
-    <div>
-      <h1>{title}</h1>
-    </div>
+    <>
+      <Head>
+        <title>Painel Sujeito Pizzaria</title>
+      </Head>
+
+      <div>
+        <Header />
+
+        <h1>Painel</h1>
+      </div>
+    </>
   );
 }
 
