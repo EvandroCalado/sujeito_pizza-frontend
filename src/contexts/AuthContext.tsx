@@ -1,7 +1,7 @@
 import { api } from '@/utils/apiClient';
 import router from 'next/router';
-import { destroyCookie, setCookie } from 'nookies';
-import { createContext, useState } from 'react';
+import { destroyCookie, parseCookies, setCookie } from 'nookies';
+import { createContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 interface AuthContextData {
@@ -47,6 +47,23 @@ export function signOut() {
 export default function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<UserProps>();
   const isAuthenticated = !!user;
+
+  useEffect(() => {
+    const { '@nextauth.token': token } = parseCookies();
+
+    if (token) {
+      api
+        .get('/users/me')
+        .then((response) => {
+          const { id, name, email } = response.data;
+
+          setUser({ id, name, email });
+        })
+        .catch(() => {
+          signOut();
+        });
+    }
+  }, []);
 
   async function signIn({ email, password }: SignInProps) {
     try {
