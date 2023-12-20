@@ -2,14 +2,22 @@ import { Loader2 } from 'lucide-react';
 import { ButtonHTMLAttributes } from 'react';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  loading?: boolean;
   children: React.ReactNode;
+  loading?: boolean;
+  color?: 'red' | 'green';
 }
 
-export default function Button({ loading, children, ...rest }: ButtonProps) {
+export default function Button({
+  loading,
+  children,
+  color = 'red',
+  ...rest
+}: ButtonProps) {
   return (
     <button
-      className="rounded-md bg-red-900 p-2 text-white duration-150 hover:brightness-110 disabled:cursor-not-allowed"
+      className={`${
+        color === 'red' ? 'bg-red-900 text-white' : 'bg-green-900 text-dark-700'
+      } rounded-md  p-2  duration-150 hover:brightness-110 disabled:cursor-not-allowed`}
       disabled={loading}
       {...rest}
     >
