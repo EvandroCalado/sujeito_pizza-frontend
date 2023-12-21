@@ -2,15 +2,31 @@ import Header from '@/components/Header';
 import Input from '@/components/ui/Input';
 import TextArea from '@/components/ui/TextArea';
 import Button from '@/components/ui/button';
+import { setupApiClient } from '@/utils/api';
 import { canSSRAuth } from '@/utils/canSSRAuth';
 import { Plus } from 'lucide-react';
 import Head from 'next/head';
 import Image from 'next/image';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
+import { toast } from 'react-toastify';
 
-export default function Product() {
+interface ProductProps {
+  categoryList: CategoryListProps[];
+}
+
+type CategoryListProps = {
+  id: string;
+  name: string;
+};
+
+export default function Product({ categoryList }: ProductProps) {
   const [imageUrl, setImageUrl] = useState('');
   const [image, setImage] = useState('');
+  const [categories] = useState<CategoryListProps[]>(categoryList || []);
+  const [categorySelected, setCategorySelected] = useState(0);
+  const [name, setName] = useState('');
+  const [price, setPrice] = useState('');
+  const [description, setDescription] = useState('');
 
   function handleFile(e: ChangeEvent<HTMLInputElement>) {
     if (!e.target.files) return;
@@ -28,6 +44,44 @@ export default function Product() {
     }
   }
 
+  function handleSelect(e: ChangeEvent<HTMLSelectElement>) {
+    setCategorySelected(e.target.value as unknown as number);
+  }
+
+  async function handleRegister(e: FormEvent) {
+    e.preventDefault();
+
+    try {
+      const data = new FormData();
+
+      if (!name || !price || !description || !image) {
+        toast.error('Preecha todos do campos!');
+        return;
+      }
+
+      data.append('name', name);
+      data.append('price', price);
+      data.append('description', description);
+      data.append('category_id', categories[categorySelected].id);
+      data.append('file', image);
+
+      const apiClient = setupApiClient();
+
+      await apiClient.post('/products', data);
+
+      toast.success('Produto cadastrado com sucesso!');
+    } catch (error) {
+      toast.error('Erro ao cadastrar!');
+      console.log(error);
+    }
+
+    setName('');
+    setPrice('');
+    setDescription('');
+    setImage('');
+    setImageUrl('');
+  }
+
   return (
     <>
       <Head>
@@ -40,7 +94,7 @@ export default function Product() {
         <main className="mx-auto my-16 flex max-w-screen-md flex-col justify-between px-8">
           <h1 className="text-4xl text-white">Novo produto</h1>
 
-          <form className="mt-8 flex flex-col gap-4">
+          <form className="mt-8 flex flex-col gap-4" onSubmit={handleRegister}>
             <label
               htmlFor="file"
               className="mb-4 flex h-72 w-full cursor-pointer items-center justify-center overflow-hidden rounded-md border-[1px] border-gray-100 bg-dark-900"
@@ -69,16 +123,39 @@ export default function Product() {
               )}
             </label>
 
-            <select className="mb-4 h-10 w-full rounded-md border-[1px] border-gray-100 bg-dark-900 px-2 text-white">
-              <option value="bebidas">Bebidas</option>
-              <option value="pizzas">Pizzas</option>
+            <select
+              className="mb-4 h-10 w-full rounded-md border-[1px] border-gray-100 bg-dark-900 px-2 text-white"
+              value={categorySelected}
+              onChange={handleSelect}
+            >
+              {categories.map((category, index) => {
+                return (
+                  <option key={category.id} value={index}>
+                    {category.name}
+                  </option>
+                );
+              })}
             </select>
 
-            <Input type="text" placeholder="Digite o nome do produto" />
+            <Input
+              type="text"
+              placeholder="Digite o nome do produto"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
 
-            <Input type="number" placeholder="Digite o preço do produto" />
+            <Input
+              type="text"
+              placeholder="Digite o preço do produto"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+            />
 
-            <TextArea placeholder="Descrição do produto" />
+            <TextArea
+              placeholder="Descrição do produto"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
 
             <Button type="submit" color="green">
               Cadastrar
@@ -90,8 +167,14 @@ export default function Product() {
   );
 }
 
-export const getServerSideProps = canSSRAuth(async () => {
+export const getServerSideProps = canSSRAuth(async (ctx) => {
+  const apiClient = setupApiClient(ctx);
+
+  const response = await apiClient.get('/categories');
+
   return {
-    props: {},
+    props: {
+      categoryList: response.data,
+    },
   };
 });
